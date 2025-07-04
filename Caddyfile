@@ -1,0 +1,64 @@
+http://mini.local {
+  encode zstd gzip
+
+  handle_path /downloads* {
+    reverse_proxy rdtclient:6500
+  }
+
+  handle /movies* {
+    reverse_proxy radarr:7878
+  }
+
+  handle /tv* {
+    reverse_proxy sonarr:8989
+  }
+
+  handle /indexers* {
+    reverse_proxy jackett:9117
+  }
+
+  handle {
+    header Content-Type text/html
+    respond <<HTML
+        <html>
+            <head>
+                <title>Media Center</title>
+                <style>
+                    body {
+                        margin: 0px;
+                        height: 100vh;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: #222;
+                        font-size: 20px;
+                        font-weight: bold;
+                        font-family: sans-serif;
+                    }
+                    body > div {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 10px;
+                    }
+                    a {
+                        padding: 12px 18px;
+                        border-radius: 12px;
+                        display: flex;
+                        background-color: #444;
+                        color: white;
+                        text-decoration: none;
+                    }
+                </style>
+            </head>
+            <body>
+                <div>
+                    <a href='/movies'>Movies</a>
+                    <a href='/tv'>TV Shows</a>
+                    <a href='/downloads'>Downloads</a>
+                </div>
+            </body>
+        </html>
+        HTML 200
+  }
+}

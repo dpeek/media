@@ -1,0 +1,90 @@
+networks:
+  media: {}
+
+services:
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    networks: [media]
+    ports:
+      - "80:80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./config/caddy:/config
+      - ./data:/data
+
+  rdtclient:
+    image: rogerfar/rdtclient
+    container_name: rdtclient
+    restart: unless-stopped
+    networks: [media]
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - BASE_PATH=/downloads
+    volumes:
+      - ./config/rdtclient:/data/db
+      - /Volumes/Media/Downloads:/data/downloads
+
+  radarr:
+    image: ghcr.io/hotio/radarr
+    container_name: radarr
+    restart: unless-stopped
+    networks: [media]
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./config/radarr:/config
+      - /Volumes/Media:/data
+
+  sonarr:
+    image: ghcr.io/hotio/sonarr
+    container_name: sonarr
+    restart: unless-stopped
+    networks: [media]
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./config/sonarr:/config
+      - /Volumes/Media:/data
+
+  jackett:
+    image: ghcr.io/hotio/jackett
+    container_name: jackett
+    restart: unless-stopped
+    networks: [media]
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+    volumes:
+      - ./config/jackett:/config
+
+  plex:
+    container_name: plex
+    image: ghcr.io/hotio/plex
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Etc/UTC
+      - PLEX_CLAIM_TOKEN=claim-2SjC16G2xytPPRFCTyTV
+      - PLEX_ADVERTISE_URL
+      - PLEX_NO_AUTH_NETWORKS
+      - PLEX_BETA_INSTALL=false
+      - PLEX_PURGE_CODECS=false
+    volumes:
+      - ./config/plex:/config
+      - ./data/plex:/transcode
+      - /Volumes/Media:/data
