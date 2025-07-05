@@ -23,6 +23,7 @@ http://mini.local {
         <html>
             <head>
                 <title>Media Center</title>
+                <meta name="viewport" content="width=device-width" />
                 <style>
                     body {
                         margin: 0px;

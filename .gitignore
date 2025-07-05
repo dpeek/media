@@ -1,0 +1,13 @@
+# Ignore all files
+*
+
+# Except these files and directories
+!/.gitignore
+!/data/.gitkeep
+!/Caddyfile
+!/docker-compose.yaml
+!/README.md
+!/config/jackett/Indexers/*
+!/config/jackett/ServerConfig.json
+!/config/radarr/config.xml
+!/config/sonarr/config.xml
