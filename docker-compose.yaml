@@ -26,7 +26,7 @@ services:
       - BASE_PATH=/downloads
     volumes:
       - ./config/rdtclient:/data/db
-      - /Volumes/Media/Downloads:/data/downloads
+      - ${DOWNLOADS}:/data/downloads
 
   radarr:
     image: ghcr.io/hotio/radarr
@@ -40,7 +40,7 @@ services:
       - TZ=Etc/UTC
     volumes:
       - ./config/radarr:/config
-      - /Volumes/Media:/data
+      - ${MEDIA}:/data
 
   sonarr:
     image: ghcr.io/hotio/sonarr
@@ -54,7 +54,7 @@ services:
       - TZ=Etc/UTC
     volumes:
       - ./config/sonarr:/config
-      - /Volumes/Media:/data
+      - ${MEDIA}:/data
 
   jackett:
     image: ghcr.io/hotio/jackett
@@ -79,7 +79,7 @@ services:
       - PGID=1000
       - UMASK=002
       - TZ=Etc/UTC
-      - PLEX_CLAIM_TOKEN=claim-2SjC16G2xytPPRFCTyTV
+      - PLEX_CLAIM_TOKEN=${PLEX_CLAIM_TOKEN}
       - PLEX_ADVERTISE_URL
       - PLEX_NO_AUTH_NETWORKS
       - PLEX_BETA_INSTALL=false
@@ -87,4 +87,4 @@ services:
     volumes:
       - ./config/plex:/config
       - ./data/plex:/transcode
-      - /Volumes/Media:/data
+      - ${MEDIA}:/data
